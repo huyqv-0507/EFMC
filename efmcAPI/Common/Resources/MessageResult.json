@@ -1,0 +1,127 @@
+﻿[
+  {
+    "Domain": "Role",
+    "Messages": [
+      {
+        "Key": "E001",
+        "Value": "Add new role failed"
+      },
+      {
+        "Key": "E002",
+        "Value": "Get roles failed"
+      },
+      {
+        "Key": "S001",
+        "Value": "Add new role successfully"
+      },
+      {
+        "Key": "S002",
+        "Value": "Get roles successfully"
+      }
+    ]
+  },
+  {
+    "Domain": "User",
+    "Messages": [
+      {
+        "Key": "E101",
+        "Value": "Not found user"
+      },
+      {
+        "Key": "E102",
+        "Value": "Not activate user"
+      },
+      {
+        "Key": "E103",
+        "Value": "Wrong password"
+      },
+      {
+        "Key": "E104",
+        "Value": "Not found status"
+      },
+      {
+        "Key": "E105",
+        "Value": "Invalid status"
+      },
+      {
+        "Key": "S101",
+        "Value": "Log in successfully"
+      },
+      {
+        "Key": "S102",
+        "Value": "Log out successfully"
+      },
+      {
+        "Key": "S103",
+        "Value": "Register successfully"
+      },
+      {
+        "Key": "S104",
+        "Value": "Get user's information successfully"
+      }
+    ]
+  },
+  {
+    "Domain": "Pharmacy",
+    "Messages": [
+      {
+        "Key": "E201",
+        "Value": "Pharmacy is not existed"
+      },
+      {
+        "Key": "E202",
+        "Value": "Create new pharmacy failed"
+      },
+      {
+        "Key": "E203",
+        "Value": "Format of UserName is existed"
+      },
+      {
+        "Key": "S201",
+        "Value": "Create new pharmacy successfully"
+      },
+      {
+        "Key": "S202",
+        "Value": "Get pharmacies successfully"
+      },
+      {
+        "Key": "S203",
+        "Value": "Update pharmacy successfully"
+      }
+    ]
+  },
+  {
+    "Domain": "Consignment",
+    "Messages": [
+      {
+        "Key": "E301",
+        "Value": ""
+      },
+      {
+        "Key": "S301",
+        "Value": "Create consignment successfully"
+      },
+      {
+        "Key": "S302",
+        "Value": "Get consignments successfully"
+      }
+    ]
+  },
+  {
+    "Domain": "Industry",
+    "Messages": [
+      {
+        "Key": "E401",
+        "Value": ""
+      },
+      {
+        "Key": "S401",
+        "Value": "Create industry successfully"
+      },
+      {
+        "Key": "S402",
+        "Value": "Get industries successfully"
+      }
+    ]
+  }
+]

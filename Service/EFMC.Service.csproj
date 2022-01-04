@@ -1,0 +1,39 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Interfaces\" />
+    <None Remove="Common\" />
+    <None Remove="Services\" />
+    <None Remove="Models\" />
+    <None Remove="Mapster" />
+    <None Remove="Common\Enums\" />
+    <None Remove="BCrypt.Net-Next" />
+    <None Remove="Common\Constants\" />
+    <None Remove="Common\Enums\UserEnumeration\" />
+    <None Remove="Common\Responses\" />
+    <None Remove="Common\Utils\" />
+    <None Remove="Microsoft.Extensions.Caching.Memory" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Interfaces\" />
+    <Folder Include="Common\" />
+    <Folder Include="Services\" />
+    <Folder Include="Models\" />
+    <Folder Include="Common\Enums\" />
+    <Folder Include="Common\Constants\" />
+    <Folder Include="Common\Results\" />
+    <Folder Include="Common\Utils\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Data\EFMC.Data.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Mapster" Version="7.2.0" />
+    <PackageReference Include="BCrypt.Net-Next" Version="4.0.2" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="6.0.0" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.810.16
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EFMC.API", "efmcAPI\EFMC.API.csproj", "{97D26E8C-098F-4094-8050-A1396CB8806E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EFMC.Data", "Data\EFMC.Data.csproj", "{D596AA9C-6D54-4922-99F5-C5B226494C06}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EFMC.Service", "Service\EFMC.Service.csproj", "{22C75DF6-F7CF-4E3B-8869-175DD6731F6D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{97D26E8C-098F-4094-8050-A1396CB8806E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{97D26E8C-098F-4094-8050-A1396CB8806E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{97D26E8C-098F-4094-8050-A1396CB8806E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{97D26E8C-098F-4094-8050-A1396CB8806E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D596AA9C-6D54-4922-99F5-C5B226494C06}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D596AA9C-6D54-4922-99F5-C5B226494C06}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D596AA9C-6D54-4922-99F5-C5B226494C06}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D596AA9C-6D54-4922-99F5-C5B226494C06}.Release|Any CPU.Build.0 = Release|Any CPU
+		{22C75DF6-F7CF-4E3B-8869-175DD6731F6D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{22C75DF6-F7CF-4E3B-8869-175DD6731F6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{22C75DF6-F7CF-4E3B-8869-175DD6731F6D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{22C75DF6-F7CF-4E3B-8869-175DD6731F6D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0128A76F-CE70-4FF9-BA16-A3BF54051206}
+	EndGlobalSection
+EndGlobal
