@@ -9,6 +9,7 @@ namespace EFMC.Service.Common.Constants
         public static readonly string PHARMACY = "PharmacyMessage";
         public static readonly string CONSIGNMENT = "ConsignmentMessage";
         public static readonly string INDUSTRY = "IndustryMessage";
+        public static readonly string DRUG = "DrugMessage";
         public static readonly string JWT = "JwtMessage";
     }
 }

@@ -24,8 +24,8 @@ namespace EFMC.API.Controllers
         {
             this.roleService = roleService;
         }
+
         [HttpPost]
-        [Authorize]
         public IActionResult AddRole(RoleCreation roleCreation)
         {
             if (!ModelState.IsValid)

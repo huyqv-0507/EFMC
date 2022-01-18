@@ -117,8 +117,10 @@ namespace EFMC.API.Common
                 {
                     builder.WithOrigins(
                         "https://localhost:5001",
-                        "https://localhost:8081")
-                            .WithMethods("PUT", "DELETE", "GET", "POST");
+                        "https://localhost:8081",
+                        "http://localhost:4200")
+                            .WithMethods("PUT", "DELETE", "GET", "POST")
+                            .WithHeaders("*");
                 })
                 ); ;
         }

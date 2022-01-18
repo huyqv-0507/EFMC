@@ -23,6 +23,7 @@ namespace EFMC.Service.Services
         private readonly IUnitOfWork unitOfWork;
         private readonly MessageResult pharmacyMessageResult;
         private readonly MessageResult consignmentMessageResult;
+        private readonly MessageResult drugMessageResult;
 
         public ConsignmentService(
             IConsignmentRepository consignmentRepository,
@@ -45,7 +46,10 @@ namespace EFMC.Service.Services
             {
                 return CacheEngine.GetMessages(MessageDomainConstant.CONSIGNMENT);
             });
-
+            drugMessageResult = memoryCache.GetOrCreate(CacheMessageConstant.DRUG, _ =>
+            {
+                return CacheEngine.GetMessages(MessageDomainConstant.DRUG);
+            });
         }
 
         public Result<List<ConsignmentModel>> GetConsignments(
@@ -71,7 +75,7 @@ namespace EFMC.Service.Services
 
                 List<Consignment> consignments = null;
                 // If not pass param. Return all consignment in pharmacy
-                if (specificDate == null && year == null && month == null && day == null)
+                if (specificDate is null && year is null && month is null && day is null)
                 {
                     consignments = consignmentRepository.GetAll().ToList();
                 }
@@ -84,7 +88,7 @@ namespace EFMC.Service.Services
                         && c.DateImported.Year == specificDate.Value.Year).ToList();
                 }
                 // If pass year only
-                else if (year != null && (month == null || day == null))
+                else if (year != null && (specificDate is null || month is null || day is null))
                 {
                     consignments = consignmentRepository.GetMany(c => c.DateImported.Year == year).ToList();
                 }
@@ -96,22 +100,22 @@ namespace EFMC.Service.Services
                         && c.DateImported.Month == month).ToList();
                 }
                 // If pass year and day
-                else if (year != null && month == null && day != null)
+                else if (year != null && month is null && day != null)
                 {
 
                 }
                 // If pass month
-                else if (month != null && (year == null || day == null))
+                else if (month != null && (year is null || day is null))
                 {
 
                 }
                 // If pass month and day
-                else if (month != null && day != null && year == null)
+                else if (month != null && day != null && year is null)
                 {
 
                 }
                 // if pass day
-                else if (day != null && month == null && year == null)
+                else if (day != null && month is null && year is null)
                 {
 
                 }
@@ -175,6 +179,16 @@ namespace EFMC.Service.Services
                         Message = MessageUtils.Message(MessagePharmacyConstant.NOT_EXISTED, pharmacyMessageResult.Messages)
                     };
                 }
+                // Check drugs are existed???
+                if (!IsExistedDrugs(consignmentImported.DrugExisteds))
+                {
+                    return new Result<ConsignmentImported>()
+                    {
+                       Success = ResultConstant.FAILED,
+                       Client = ResultConstant.CLIENT,
+                       Message = MessageUtils.Message(MessageDrugConstant.NOT_EXISTED, drugMessageResult.Messages)
+                    };
+                }
                 // Adapt data to Consignment object
                 Consignment consignment = new Consignment()
                 {
@@ -218,14 +232,26 @@ namespace EFMC.Service.Services
                 {
                     // Create Drug
                     List<Drug> drugs = new List<Drug>();
+                    Drug drug;
                     consignmentImported.DrugNews.ForEach(_ =>
                     {
-                        drugs.Add(_.Adapt<Drug>());
+                        drug = new Drug()
+                        {
+                            Name = _.Name,
+                            Package = _.Package,
+                            Content = _.Content,
+                            Unit = _.Unit,
+                            UnitPrice = _.UnitPrice,
+                            Quantity = _.Quantity,
+                            BrandName = _.BrandName,
+                            Ingredient = _.Ingredient,
+                            Description = _.Description,
+                            MainIngredient = _.MainIngredient
+                        };
+                        drugs.Add(drug);
+
                     });
-                    drugs.ForEach(d =>
-                    {
-                        drugRepository.Add(d);
-                    });
+                    drugRepository.AddRange(drugs);
                     // Save drug to db
                     unitOfWork.Commit();
 
@@ -247,6 +273,7 @@ namespace EFMC.Service.Services
 
                 // Update total cost of consignment
                 consignment.TotalCost = totalCost;
+                consignmentImported.TotalCost = totalCost;
 
                 // Save to database
                 unitOfWork.Commit();
@@ -266,6 +293,20 @@ namespace EFMC.Service.Services
                     MessageError = e.Message
                 };
             }
+        }
+        public bool IsExistedDrugs(List<ConsignmentImported.DrugExisted> drugsExisted)
+        {
+            if (drugsExisted != null)
+            {
+                Drug drug;
+                foreach (ConsignmentImported.DrugExisted drugExisted in drugsExisted)
+                {
+                    drug = drugRepository.Get(d => d.DrugId == drugExisted.DrugId);
+                    if (drug == null)
+                        return false;
+                }
+            }
+            return true;
         }
     }
 }

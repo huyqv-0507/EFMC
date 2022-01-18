@@ -34,6 +34,10 @@ namespace EFMC.Data.Common
         {
             dbSet.Add(entity);
         }
+        public void AddRange(List<T> entities)
+        {
+            dbSet.AddRange(entities);
+        }
         public void Update(T entity)
         {
             dbSet.Attach(entity);
@@ -62,9 +66,9 @@ namespace EFMC.Data.Common
         {
             return dbSet;
         }
-        public virtual IEnumerable<T> GetPaged(int page, int pageSize)
+        public IQueryable<T> GetPaged(int page, int pageSize)
         {
-            return dbSet.Skip(page * pageSize).Take(pageSize).ToList();
+            return dbSet.Skip(page * pageSize).Take(pageSize);
         }
         #endregion
     }

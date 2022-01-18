@@ -39,6 +39,7 @@
     <Content Remove="Common\MessageUtils\MessageResult.json" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\.editorconfig" Link=".editorconfig" />
     <None Include="Common\Resources\MessageResult.json" />
   </ItemGroup>
 </Project>

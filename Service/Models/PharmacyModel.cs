@@ -21,7 +21,7 @@ namespace EFMC.Service.Models
             public int OwnerId { get; set; }
             public string OwnerName { get; set; }
             public int PharmacistId { get; set; }
-            public string PharmacisName { get; set; }
+            public string PharmacistName { get; set; }
             public int PharmacyId { get; set; }
             public string Status { get; set; }
         }

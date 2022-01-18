@@ -8,7 +8,9 @@ namespace EFMC.Service.Interfaces
     public interface IPharmacyService
     {
         public Result<PharmacyModel> CreatePharmacy(PharmacyCreationModel pharmacy);
+#nullable enable
         public Result<List<PharmacyModel>> GetPharmacies(int ownerId, string? status);
+#nullable disable
         public Result<PharmacyModel> UpdatePharmacy(int pharmacyId, PharmacyUpdateModel pharmacyUpdate);
         public Result<List<IndustryModel>> CreateIndustry(int pharmacyId, List<string> industries);
         public Result<List<IndustryModel>> GetIndustries(int pharmacyId);

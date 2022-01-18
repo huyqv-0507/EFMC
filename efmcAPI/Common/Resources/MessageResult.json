@@ -123,5 +123,14 @@
         "Value": "Get industries successfully"
       }
     ]
+  },
+  {
+    "Domain": "Drug",
+    "Messages": [
+      {
+        "Key": "E501",
+        "Value":  "Drug is existed"
+      }
+    ]
   }
 ]

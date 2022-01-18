@@ -9,6 +9,7 @@ namespace EFMC.Service.Common.Constants
         public static readonly string PHARMACY = "Pharmacy";
         public static readonly string CONSIGNMENT = "Consignment";
         public static readonly string INDUSTRY = "Industry";
+        public static readonly string DRUG = "Drug";
     }
     // Mapping message Role
     public class MessageRoleConstant
@@ -75,6 +76,15 @@ namespace EFMC.Service.Common.Constants
         #region Success
         public static readonly string CREATE_SUCCESS = "S401";
         public static readonly string GET_ALL_SUCCESS = "S402";
+        #endregion
+    }
+    public class MessageDrugConstant
+    {
+        #region Error
+        public static readonly string NOT_EXISTED = "E501";
+        #endregion
+
+        #region Success
         #endregion
     }
 }

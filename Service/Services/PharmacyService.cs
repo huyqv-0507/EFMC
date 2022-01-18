@@ -147,22 +147,26 @@ namespace EFMC.Service.Services
                 pharmacyRepository.Add(pharmacyRepo);
                 // Save pharmacy to database
                 unitOfWork.Commit();
-
+                // Infomation of pharmacy to return client
+                PharmacyModel pharmacyModel = pharmacyRepo.Adapt<PharmacyModel>();
+                // List of user to generate to database
                 List<User> users = new List<User>();
+                // UserName of pharmacist
+                string userNameGeneration = $"{pharmacy.PharmacistGeneration.UserNameFormat}";
                 if (pharmacy.PharmacistGeneration != null)
                 {
                     for (int i = 0; i < pharmacy.PharmacistGeneration.Count; i++)
                     {
                         users.Add(new User()
                         {
-                            UserName = $"{pharmacy.PharmacistGeneration.UserNameFormat}{i}",
+                            UserName = $"{userNameGeneration}{i}",
                             // Hash password
                             Password = BCrypt.Net.BCrypt.HashPassword(UserConstant.PASSWORD_DEFAULT),
                             IsLogin = false,
                             LoginFailedCount = 0,
                             Phone = "",
-                            FullName = $"{pharmacy.PharmacistGeneration.UserNameFormat}",
-                            RoleId = 2,
+                            FullName = userNameGeneration,
+                            RoleId = 2, // Pharmacist role
                             Status = UserStatusEnumeration.Activate.ToString()
                         });
                     }
@@ -175,7 +179,7 @@ namespace EFMC.Service.Services
 
                 if (users.Count > 0)
                 {
-                    var tmpUser = userRepository.Get(user => user.UserName.Contains($"{pharmacy.PharmacistGeneration.UserNameFormat}%"));
+                    var tmpUser = userRepository.Get(user => user.UserName.Equals(userNameGeneration));
                     if (tmpUser != null)
                     {
                         return new Result<PharmacyModel>()
@@ -187,37 +191,53 @@ namespace EFMC.Service.Services
                         };
                     }
                     // Add to UserPharmacy entity
-                    users.ForEach(pharmacist => userPharmacyRepository.Add(new UserPharmacy()
-                    {
-                        OwnerId = pharmacy.UserId,
-                        PharmacyId = pharmacyRepo.PharmacyId,
-                        PharmacistId = pharmacist.UserId,
-                        Status = UserPharmacyEnumeration.Activate.ToString()
-                    }));
+                    UserPharmacy userPharmacy;
+                    List<UserPharmacy> userPharmacies = new List<UserPharmacy>();
+                    users.ForEach(pharmacist => {
+                        string fullName = userRepository.Get(u => u.UserId == pharmacist.UserId).FullName;
+                        userPharmacy = new UserPharmacy()
+                        {
+                            OwnerId = pharmacy.UserId,
+                            PharmacyId = pharmacyRepo.PharmacyId,
+                            PharmacistId = pharmacist.UserId,
+                            Status = UserPharmacyEnumeration.Activate.ToString(),
+                            OwnerName = fullName,
+                            PharmacistName = fullName
+                        };
+                        userPharmacies.Add(userPharmacy);
+                        userPharmacyRepository.Add(userPharmacy);
+                    });
                     // Save userPharmacy to database
                     unitOfWork.Commit();
+                    pharmacyModel.UserPharmacies = userPharmacies.ConvertAll(new Converter<UserPharmacy, PharmacyModel.UserPharmacyLocal>(PharmacyModel.ToUserPharmacyLocal));
                 }
                 // If have not any pharmacist. Owner is pharmacist
                 else
                 {
+                    string fullName = userRepository.Get(u => u.UserId == pharmacy.UserId).FullName;
                     UserPharmacy userPharmacy = new UserPharmacy()
                     {
                         OwnerId = pharmacy.UserId,
                         PharmacyId = pharmacyRepo.PharmacyId,
                         PharmacistId = pharmacy.UserId,
-                        Status = UserPharmacyEnumeration.Activate.ToString()
+                        Status = UserPharmacyEnumeration.Activate.ToString(),
+                        OwnerName = fullName,
+                        PharmacistName = fullName
                     };
                     userPharmacyRepository.Add(userPharmacy);
                     // Save userPharmacy to database
                     unitOfWork.Commit();
+
+                    pharmacyModel.UserPharmacies = new List<PharmacyModel.UserPharmacyLocal>();
+                    pharmacyModel.UserPharmacies.Add(PharmacyModel.ToUserPharmacyLocal(userPharmacy));
                 }
 
                 return new Result<PharmacyModel>()
                 {
                     Success = ResultConstant.SUCCESS,
                     Client = ResultConstant.CLIENT,
-                    Data = null,
-                    Message = MessageUtils.Message(MessagePharmacyConstant.CREATE_SUCCESS, userMessageResult.Messages)
+                    Data = pharmacyModel,
+                    Message = MessageUtils.Message(MessagePharmacyConstant.CREATE_SUCCESS, pharmacyMessageResult.Messages)
                 };
             }
             catch (Exception e)
@@ -341,7 +361,7 @@ namespace EFMC.Service.Services
                         var pharmacistTemp = userRepository.Get(u => u.UserId == userPharmacyLocal.PharmacistId);
 
                         userPharmacyLocal.OwnerName = ownerTemp.FullName;
-                        userPharmacyLocal.PharmacisName = pharmacistTemp.FullName;
+                        userPharmacyLocal.PharmacistName = pharmacistTemp.FullName;
                     }
                     PharmacyModel pharmacyModel = new PharmacyModel()
                     {
@@ -393,21 +413,22 @@ namespace EFMC.Service.Services
                 pharmacy.Address = pharmacyUpdate.Address;
                 pharmacy.Status = pharmacyUpdate.Status;
 
-                pharmacyUpdate.UserPharmacies.ForEach(pharmacyUpdateTemp =>
+                if (pharmacyUpdate.UserPharmacies != null)
                 {
-                    var pharmacyTemp = userPharmacyRepository.Get(up => up.UserPharmacyId == pharmacyUpdateTemp.UserPharmacyId);
-                    if (pharmacyTemp != null)
+                    pharmacyUpdate.UserPharmacies.ForEach(pharmacyUpdateTemp =>
                     {
-                        pharmacyTemp.OwnerId = (int)pharmacyUpdateTemp.OwnerId;
-                        pharmacyTemp.PharmacistId = (int)pharmacyUpdateTemp.PharmacistId;
-                        pharmacyTemp.Status = pharmacyUpdate.Status;
-                    }
-                });
+                        var pharmacyTemp = userPharmacyRepository.Get(up => up.UserPharmacyId == pharmacyUpdateTemp.UserPharmacyId);
+                        if (pharmacyTemp != null)
+                        {
+                            pharmacyTemp.OwnerId = (int)pharmacyUpdateTemp.OwnerId;
+                            pharmacyTemp.PharmacistId = (int)pharmacyUpdateTemp.PharmacistId;
+                            pharmacyTemp.Status = pharmacyUpdate.Status;
+                        }
+                    });
+                }
 
                 // Save to database
                 unitOfWork.Commit();
-
-
 
                 return new Result<PharmacyModel>()
                 {

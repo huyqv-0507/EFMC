@@ -54,9 +54,9 @@ namespace EFMC.API.Controllers
 
             return StatusCode(500, result);
         }
-        [HttpGet("{ownerId}")]
+        [HttpGet()]
 #nullable enable
-        public IActionResult GetPharmacies(int ownerId, [FromQuery] string? status)
+        public IActionResult GetPharmacies([FromQuery] int ownerId, [FromQuery] string? status)
         {
             var result = pharmacyService.GetPharmacies(ownerId, status);
             if (result.Success)
